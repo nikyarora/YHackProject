@@ -61,7 +61,8 @@ const CGFloat kJSQMessagesCollectionViewAvatarSizeDefault = 30.0f;
 - (void)jsq_configureFlowLayout
 {
     self.scrollDirection = UICollectionViewScrollDirectionVertical;
-    self.sectionInset = UIEdgeInsetsMake(10.0f, 4.0f, 10.0f, 4.0f);
+    self.sectionInset = UIEdgeInsetsMake(10.0f, 4.0f, 10.0f + 100 , 4.0f);
+    
     self.minimumLineSpacing = 4.0f;
     
     _messageBubbleFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
@@ -268,6 +269,7 @@ const CGFloat kJSQMessagesCollectionViewAvatarSizeDefault = 30.0f;
     if (self.springinessEnabled) {
         //  pad rect to avoid flickering
         CGFloat padding = -100.0f;
+        
         CGRect visibleRect = CGRectInset(self.collectionView.bounds, padding, padding);
         
         NSArray *visibleItems = [super layoutAttributesForElementsInRect:visibleRect];

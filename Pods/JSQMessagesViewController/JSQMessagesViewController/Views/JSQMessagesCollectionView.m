@@ -85,6 +85,7 @@
     if (self) {
         [self jsq_configureCollectionView];
     }
+    
     return self;
 }
 

@@ -22,6 +22,7 @@
 		D84214EB1FD30FE80028830C /* CommonCryptor.h in Resources */ = {isa = PBXBuildFile; fileRef = D84214EA1FD30EF90028830C /* CommonCryptor.h */; };
 		D84214EE1FD322EC0028830C /* ToneAnalyzerV3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D84214EC1FD321AF0028830C /* ToneAnalyzerV3.framework */; };
 		D84214EF1FD322EC0028830C /* ToneAnalyzerV3.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D84214EC1FD321AF0028830C /* ToneAnalyzerV3.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D87B43E21FD3325800171273 /* Tone.swift in Sources */ = {isa = PBXBuildFile; fileRef = D87B43E11FD3325800171273 /* Tone.swift */; };
 		D89BAE161FD275B300FEC748 /* Credentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89BAE151FD275B300FEC748 /* Credentials.swift */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +59,7 @@
 		D84214E81FD30D240028830C /* CommonCrypto */ = {isa = PBXFileReference; lastKnownFileType = folder; path = CommonCrypto; sourceTree = "<group>"; };
 		D84214EA1FD30EF90028830C /* CommonCryptor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommonCryptor.h; sourceTree = "<group>"; };
 		D84214EC1FD321AF0028830C /* ToneAnalyzerV3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ToneAnalyzerV3.framework; path = Carthage/Build/iOS/ToneAnalyzerV3.framework; sourceTree = "<group>"; };
+		D87B43E11FD3325800171273 /* Tone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tone.swift; sourceTree = "<group>"; };
 		D89BAE151FD275B300FEC748 /* Credentials.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Credentials.swift; path = ../../../../../Desktop/Credentials.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -130,6 +132,7 @@
 				6800B9281EE218EC00F2BD7C /* Assets.xcassets */,
 				6800B92A1EE218EC00F2BD7C /* LaunchScreen.storyboard */,
 				6800B92D1EE218EC00F2BD7C /* Info.plist */,
+				D87B43E11FD3325800171273 /* Tone.swift */,
 			);
 			path = "Simple Chat";
 			sourceTree = "<group>";
@@ -251,11 +254,13 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-Simple Chat/Pods-Simple Chat-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/JSQMessagesViewController/JSQMessagesViewController.framework",
 				"${BUILT_PRODUCTS_DIR}/JSQSystemSoundPlayer/JSQSystemSoundPlayer.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JSQMessagesViewController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JSQSystemSoundPlayer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -290,6 +295,7 @@
 				681575201EE219F800E2F476 /* User.swift in Sources */,
 				6800B9241EE218EC00F2BD7C /* ViewController.swift in Sources */,
 				D89BAE161FD275B300FEC748 /* Credentials.swift in Sources */,
+				D87B43E21FD3325800171273 /* Tone.swift in Sources */,
 				6800B9221EE218EC00F2BD7C /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -429,7 +435,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.glennrfisher.Simple-Chatx";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_INCLUDE_PATHS = "/Users/nathan/Code/YHack/simple-chat-swift-master/simple-chat/Carthage/Checkouts/swift-sdk/Source/SupportingFiles/Dependencies/Starscream/zlib";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -449,7 +455,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.glennrfisher.Simple-Chatx";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_INCLUDE_PATHS = "/Users/nathan/Code/YHack/simple-chat-swift-master/simple-chat/Carthage/Checkouts/swift-sdk/Source/SupportingFiles/Dependencies/Starscream/zlib/module.modulemap";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

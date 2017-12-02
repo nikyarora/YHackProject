@@ -21,6 +21,7 @@ import SpeechToTextV1
 import ConversationV1
 import TextToSpeechV1
 import JSQMessagesViewController
+import SwiftyJSON
 
 class ViewController: JSQMessagesViewController {
     
@@ -37,8 +38,23 @@ class ViewController: JSQMessagesViewController {
     var workspace = Credentials.ConversationWorkspace
     var context: Context?
     
+    var allMessageScores: [[[Double]]]!
+    
+    var currentMessageScores: [[Double]]!
+    var currentMessageAnger: Double = 0.0
+    var currentMessageEmotion: Double = 0.5
+
+    @IBOutlet weak var scoreView: UIView!
+    var keyboardHeight:CGFloat = 0.0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        allMessageScores = []
+        currentMessageScores = []
+        currentMessageAnger = 0.0
+        currentMessageEmotion = 0.5
+        
         setupInterface()
         setupSender()
         setupWatsonServices()
@@ -87,11 +103,7 @@ extension ViewController {
     /// Start a new conversation
     func startConversation() {
         
-        let text = "Team, I know that times are tough! Product sales have been disappointing for the past three quarters. We have a competitive product, but we need to do a better job of selling it!"
         let failure = { (error: Error) in print(error) }
-        toneAnalyzer.getTone(ofText: text, failure: failure) { tones in
-            print(tones)
-        }
         
         conversation.message(
             workspaceID: workspace,
@@ -165,6 +177,21 @@ extension ViewController {
         microphoneButton.addTarget(self, action: #selector(stopTranscribing), for: .touchUpInside)
         microphoneButton.addTarget(self, action: #selector(stopTranscribing), for: .touchUpOutside)
         inputToolbar.contentView.leftBarButtonItem = microphoneButton
+
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
+
+       
+    }
+    
+    @objc fileprivate func keyboardWillShow(notification:NSNotification) {
+        if self.keyboardHeight == 0.0 {
+            if let keyboardRectValue = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+                self.keyboardHeight = keyboardRectValue.height
+                let myNewView=UIView(frame: CGRect(x: 0, y: self.view.frame.height - self.keyboardHeight - 125, width: self.view.frame.width, height: 75))
+                myNewView.backgroundColor = .red
+                self.view.addSubview(myNewView)
+            }
+        }
     }
     
     func setupSender() {
@@ -177,8 +204,8 @@ extension ViewController {
         withMessageText text: String!,
         senderId: String!,
         senderDisplayName: String!,
-        date: Date!)
-    {
+        date: Date!) {
+        
         let message = JSQMessage(
             senderId: User.me.rawValue,
             senderDisplayName: User.getName(User.me),
@@ -193,17 +220,55 @@ extension ViewController {
         
         // send text to conversation service
         let input = InputData(text: text)
+        
         let request = MessageRequest(input: input, context: context)
+        
         conversation.message(
             workspaceID: workspace,
             request: request,
             failure: failure,
             success: presentResponse
         )
+        
+        // send text to toneAnalyzer service
+        toneAnalyzer.getTone(ofText: text, failure: failure) { tones in
+            
+            let messageTones = tones.documentTone
+            
+            let emotionTones = messageTones[0]
+            var emotionScores = [Double]()
+            for tone in emotionTones.tones {
+                emotionScores.append(tone.score)
+            }
+            
+            let languageTones = messageTones[1]
+            var languageScores = [Double]()
+            for tone in languageTones.tones {
+                languageScores.append(tone.score)
+            }
+            
+            let socialTones = messageTones[2]
+            var socialScores = [Double]()
+            for tone in socialTones.tones {
+                socialScores.append(tone.score)
+            }
+            
+            self.currentMessageScores = [emotionScores, languageScores, socialScores]
+            self.allMessageScores.append(self.currentMessageScores)
+            
+        }
     }
     
     override func didPressAccessoryButton(_ sender: UIButton!) {
         // required by super class
+    }
+    
+    func getCurrentMessageAnger() -> Double {
+        return self.currentMessageScores[0][0]
+    }
+    
+    func getCurrentMessageEmotion() -> Double {
+        return self.currentMessageScores[0][0]
     }
 }
 

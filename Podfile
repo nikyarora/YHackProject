@@ -7,5 +7,6 @@ target 'Simple Chat' do
 
   # Pods for Simple Chat
   pod 'JSQMessagesViewController'
+  pod 'SwiftyJSON'
 
 end
