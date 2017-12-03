@@ -46,6 +46,7 @@ class ViewController: JSQMessagesViewController {
     var keyboardHeight:CGFloat = 0.0
     var infoView: UIView!
     var infoViewText: UITextView!
+    var moreInfo: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,6 +99,10 @@ extension ViewController {
         DispatchQueue.main.async {
             self.present(alert, animated: true)
         }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        self.infoView.isHidden = true
     }
     
     /// Start a new conversation
@@ -177,25 +182,49 @@ extension ViewController {
         microphoneButton.addTarget(self, action: #selector(stopTranscribing), for: .touchUpInside)
         microphoneButton.addTarget(self, action: #selector(stopTranscribing), for: .touchUpOutside)
         inputToolbar.contentView.leftBarButtonItem = microphoneButton
-
+        
         // infoView
         self.infoView = UIView(frame: CGRect(x: 0, y: 325, width: self.view.frame.width, height: 75))
-        self.infoView.backgroundColor = .red
-        
+        self.infoView.backgroundColor = UIColor.jsq_messageBubbleLightGray()
         self.view.addSubview(self.infoView)
         
+        // MoreInfo Button
+        self.moreInfo = UIButton(type: .system)
+        moreInfo.setTitle("More", for: .normal)
+        moreInfo.setTitleColor(UIColor.blue, for: .normal)
+        moreInfo.backgroundColor = UIColor.yellow
+        self.infoView.addSubview(moreInfo)
+        _ = moreInfo.anchor(self.infoView.topAnchor, left: nil, bottom: self.infoView.bottomAnchor, right: self.infoView.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 80, heightConstant: 40)
+        moreInfo.addTarget(self, action: #selector(goToMoreInfoView), for: .touchUpInside)
+        
+        // InfoText
         self.infoViewText = UITextView()
+        self.infoViewText.backgroundColor = UIColor.clear
         self.infoViewText.text = "Customer Emotion"
         self.infoViewText.isEditable = false
-        self.infoViewText.backgroundColor = UIColor.yellow
         infoView.addSubview(self.infoViewText)
         
-        let artributedText = NSMutableAttributedString(string:self.infoViewText.text, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 20, weight: UIFontWeightMedium), NSForegroundColorAttributeName: UIColor.black])
+        let artributedText = NSMutableAttributedString(string:self.infoViewText.text, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 18, weight: UIFontWeightMedium), NSForegroundColorAttributeName: UIColor.black])
         infoViewText.attributedText = artributedText
         
-        self.infoViewText.anchorToTop(self.infoView.topAnchor, left: self.infoView.leftAnchor, bottom: self.infoView.bottomAnchor, right: self.infoView.rightAnchor)
+        self.infoViewText.anchorToTop(self.infoView.topAnchor, left: self.infoView.leftAnchor, bottom: self.infoView.bottomAnchor, right: self.moreInfo.leftAnchor)
         
         self.infoView.isHidden = true
+    }
+    
+    func goToMoreInfoView() {
+        self.performSegue(withIdentifier: "goToMoreInfoView", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let identifier = segue.identifier {
+            if identifier == "goToMoreInfoView" {
+                if let dest = segue.destination as? MoreInfoViewController {
+                    dest.currentMessageScores = self.currentMessageScores
+                    dest.allMessageAnger = self.allMessageAnger
+                }
+            }
+        }
     }
     
     func setupSender() {
@@ -292,7 +321,7 @@ extension ViewController {
                 }
                 
                 for emotionName in emotionNames {
-                    emotionInfoText += emotionName + " "
+                    emotionInfoText += emotionName + "  "
                 }
                 
                 self.infoViewText.text = emotionInfoText
