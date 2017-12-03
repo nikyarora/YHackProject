@@ -9,9 +9,10 @@
 import Foundation
 
 //let toneCategoryName = ["Emotion Tone", "Language Tone", "Social Tone"]
-let emotionTone = ["Anger", "Disgust", "Fear", "Joy", "Sadness"]
-let languageTone = ["analytical", "confident", "tentative", ]
-let socialTone = ["Openness", "Conscientiousness", "Extraversion", "Agreeableness", "Emotional Range"]
+//let emotionTone = ["Anger", "Disgust", "Fear", "Joy", "Sadness"]
+//Anger 50, disgust , fear > < Joy 100
+//let languageTone = ["analytical", "confident", "tentative", ]
+//let socialTone = ["Openness", "Conscientiousness", "Extraversion", "Agreeableness", "Emotional Range"]
 
 @objc class Tone: NSObject {
     let id: String!

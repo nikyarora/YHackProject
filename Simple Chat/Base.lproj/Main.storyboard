@@ -20,26 +20,9 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="O2H-NH-mM8">
-                                <rect key="frame" x="0.0" y="167" width="375" height="500"/>
-                                <color key="backgroundColor" red="0.49080771782014854" green="1" blue="0.4267090343957699" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="500" id="4wb-8O-x12"/>
-                                </constraints>
-                            </view>
-                        </subviews>
                         <color key="backgroundColor" red="0.99495212016976686" green="1" blue="0.43963121089273394" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                        <constraints>
-                            <constraint firstItem="O2H-NH-mM8" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="5kJ-wk-KvF"/>
-                            <constraint firstAttribute="trailing" secondItem="O2H-NH-mM8" secondAttribute="trailing" id="9OS-nO-B7k"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="O2H-NH-mM8" secondAttribute="bottom" id="eu1-jf-JbR"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Simple Chat" id="c3D-LP-c61"/>
-                    <connections>
-                        <outlet property="scoreView" destination="O2H-NH-mM8" id="yMc-FX-tB5"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

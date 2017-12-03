@@ -39,18 +39,19 @@ class ViewController: JSQMessagesViewController {
     var context: Context?
     
     var allMessageScores: [[[Double]]]!
-    
+    var allMessageAnger: [Double]!
     var currentMessageScores: [[Double]]!
     var currentMessageAnger: Double = 0.0
     var currentMessageEmotion: Double = 0.5
 
-    @IBOutlet weak var scoreView: UIView!
     var keyboardHeight:CGFloat = 0.0
+    var infoView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         allMessageScores = []
+        allMessageAnger = [Double]()
         currentMessageScores = []
         currentMessageAnger = 0.0
         currentMessageEmotion = 0.5
@@ -161,8 +162,9 @@ extension ViewController {
     func setupInterface() {
         // bubbles
         let factory = JSQMessagesBubbleImageFactory()
-        let incomingColor = UIColor.jsq_messageBubbleLightGray()
-        let outgoingColor = UIColor.jsq_messageBubbleGreen()
+//        let incomingColor = UIColor.jsq_messageBubbleLightGray()
+        let incomingColor = UIColor(red: 0.29, green: 0.44, blue: 0.54, alpha: 1)
+        let outgoingColor = UIColor.jsq_messageBubbleLightGray()
         incomingBubble = factory!.incomingMessagesBubbleImage(with: incomingColor)
         outgoingBubble = factory!.outgoingMessagesBubbleImage(with: outgoingColor)
         
@@ -178,20 +180,11 @@ extension ViewController {
         microphoneButton.addTarget(self, action: #selector(stopTranscribing), for: .touchUpOutside)
         inputToolbar.contentView.leftBarButtonItem = microphoneButton
 
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
-
-       
-    }
-    
-    @objc fileprivate func keyboardWillShow(notification:NSNotification) {
-        if self.keyboardHeight == 0.0 {
-            if let keyboardRectValue = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-                self.keyboardHeight = keyboardRectValue.height
-                let myNewView=UIView(frame: CGRect(x: 0, y: self.view.frame.height - self.keyboardHeight - 125, width: self.view.frame.width, height: 75))
-                myNewView.backgroundColor = .red
-                self.view.addSubview(myNewView)
-            }
-        }
+        // infoView
+        self.infoView = UIView(frame: CGRect(x: 0, y: 325, width: self.view.frame.width, height: 75))
+        self.infoView.backgroundColor = .red
+        self.view.addSubview(self.infoView)
+        self.infoView.isHidden = true
     }
     
     func setupSender() {
@@ -233,29 +226,39 @@ extension ViewController {
         // send text to toneAnalyzer service
         toneAnalyzer.getTone(ofText: text, failure: failure) { tones in
             
-            let messageTones = tones.documentTone
+            DispatchQueue.main.async() {
             
-            let emotionTones = messageTones[0]
-            var emotionScores = [Double]()
-            for tone in emotionTones.tones {
-                emotionScores.append(tone.score)
+                let messageTones = tones.documentTone
+                
+                let emotionTones = messageTones[0]
+                var emotionScores = [Double]()
+                for tone in emotionTones.tones {
+                    emotionScores.append(tone.score)
+                }
+                
+                let languageTones = messageTones[1]
+                var languageScores = [Double]()
+                for tone in languageTones.tones {
+                    languageScores.append(tone.score)
+                }
+                
+                let socialTones = messageTones[2]
+                var socialScores = [Double]()
+                for tone in socialTones.tones {
+                    socialScores.append(tone.score)
+                }
+                
+                self.currentMessageScores = [emotionScores, languageScores, socialScores]
+                self.allMessageScores.append(self.currentMessageScores)
+                self.allMessageAnger.append(self.currentMessageScores[0][0])
+//                print(self.allMessageAnger.count)
+            
+                self.collectionView.reloadData()
+                
+                if self.infoView.isHidden {
+                    self.infoView.isHidden = false
+                }
             }
-            
-            let languageTones = messageTones[1]
-            var languageScores = [Double]()
-            for tone in languageTones.tones {
-                languageScores.append(tone.score)
-            }
-            
-            let socialTones = messageTones[2]
-            var socialScores = [Double]()
-            for tone in socialTones.tones {
-                socialScores.append(tone.score)
-            }
-            
-            self.currentMessageScores = [emotionScores, languageScores, socialScores]
-            self.allMessageScores.append(self.currentMessageScores)
-            
         }
     }
     
@@ -263,9 +266,19 @@ extension ViewController {
         // required by super class
     }
     
-    func getCurrentMessageAnger() -> Double {
-        return self.currentMessageScores[0][0]
-    }
+//    func getCurrentMessageAnger() -> Double {
+//
+//        print(self.currentMessageScores)
+//        print(self.allMessageScores)
+//
+//        var score = 0.0
+//        if (self.currentMessageScores.count > 0) {
+//             score = self.currentMessageScores[0][0]
+//        }
+//
+//        self.allMessageAnger.append(score)
+//        return score
+//    }
     
     func getCurrentMessageEmotion() -> Double {
         return self.currentMessageScores[0][0]
@@ -323,7 +336,26 @@ extension ViewController {
         let jsqCell = cell as! JSQMessagesCollectionViewCell
         let message = messages[indexPath.item]
         let isOutgoing = (message.senderId == senderId)
-        jsqCell.textView.textColor = (isOutgoing) ? .white : .black
+        
+//        jsqCell.textView.textColor = (isOutgoing) ? .white : .black
+        
+        if !isOutgoing {
+            jsqCell.textView.textColor = UIColor.white
+        } else {
+//            print("Row ", indexPath.row)
+//            print("Count", self.allMessageAnger.count)
+//            row  1 3 5
+//          count  1 2 3
+            
+            if (indexPath.row == self.allMessageAnger.count + self.allMessageAnger.count - 1) {
+                let fraction = self.allMessageAnger[self.allMessageAnger.count - 1]
+                print(fraction)
+                jsqCell.textView.textColor = colorWhite.interpolateRGBColorTo(end: colorRed, fraction: CGFloat(fraction))
+            } else {
+                 jsqCell.textView.textColor = UIColor.white
+            }
+        }
+        
         return jsqCell
     }
 }
