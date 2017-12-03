@@ -41,11 +41,11 @@ class ViewController: JSQMessagesViewController {
     var allMessageScores: [[[Double]]]!
     var allMessageAnger: [Double]!
     var currentMessageScores: [[Double]]!
-    var currentMessageAnger: Double = 0.0
     var currentMessageEmotion: Double = 0.5
 
     var keyboardHeight:CGFloat = 0.0
     var infoView: UIView!
+    var infoViewText: UITextView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,7 +53,6 @@ class ViewController: JSQMessagesViewController {
         allMessageScores = []
         allMessageAnger = [Double]()
         currentMessageScores = []
-        currentMessageAnger = 0.0
         currentMessageEmotion = 0.5
         
         setupInterface()
@@ -162,7 +161,6 @@ extension ViewController {
     func setupInterface() {
         // bubbles
         let factory = JSQMessagesBubbleImageFactory()
-//        let incomingColor = UIColor.jsq_messageBubbleLightGray()
         let incomingColor = UIColor(red: 0.29, green: 0.44, blue: 0.54, alpha: 1)
         let outgoingColor = UIColor.jsq_messageBubbleLightGray()
         incomingBubble = factory!.incomingMessagesBubbleImage(with: incomingColor)
@@ -183,7 +181,20 @@ extension ViewController {
         // infoView
         self.infoView = UIView(frame: CGRect(x: 0, y: 325, width: self.view.frame.width, height: 75))
         self.infoView.backgroundColor = .red
+        
         self.view.addSubview(self.infoView)
+        
+        self.infoViewText = UITextView()
+        self.infoViewText.text = "Customer Emotion"
+        self.infoViewText.isEditable = false
+        self.infoViewText.backgroundColor = UIColor.yellow
+        infoView.addSubview(self.infoViewText)
+        
+        let artributedText = NSMutableAttributedString(string:self.infoViewText.text, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 20, weight: UIFontWeightMedium), NSForegroundColorAttributeName: UIColor.black])
+        infoViewText.attributedText = artributedText
+        
+        self.infoViewText.anchorToTop(self.infoView.topAnchor, left: self.infoView.leftAnchor, bottom: self.infoView.bottomAnchor, right: self.infoView.rightAnchor)
+        
         self.infoView.isHidden = true
     }
     
@@ -250,14 +261,36 @@ extension ViewController {
                 
                 self.currentMessageScores = [emotionScores, languageScores, socialScores]
                 self.allMessageScores.append(self.currentMessageScores)
+                
+                for emotionIndex in 0..<(self.currentMessageScores[0].count) {
+                    
+                }
+                
                 self.allMessageAnger.append(self.currentMessageScores[0][0])
-//                print(self.allMessageAnger.count)
-            
+                
                 self.collectionView.reloadData()
                 
                 if self.infoView.isHidden {
                     self.infoView.isHidden = false
                 }
+                
+                var emotionInfoText = ""
+                var emotionNames = [String]()
+                
+                for categoryIndex in 0..<3 {
+                    var categoryScores = self.currentMessageScores[categoryIndex]
+                    for emotionIndex in 0..<(categoryScores.count) {
+                        if (categoryScores[emotionIndex] > 0.5) {
+                            emotionNames.append(toneCategoryList[categoryIndex][emotionIndex])
+                        }
+                    }
+                }
+                
+                for emotionName in emotionNames {
+                    emotionInfoText += emotionName + " "
+                }
+                
+                self.infoViewText.text = emotionInfoText
             }
         }
     }
@@ -266,19 +299,6 @@ extension ViewController {
         // required by super class
     }
     
-//    func getCurrentMessageAnger() -> Double {
-//
-//        print(self.currentMessageScores)
-//        print(self.allMessageScores)
-//
-//        var score = 0.0
-//        if (self.currentMessageScores.count > 0) {
-//             score = self.currentMessageScores[0][0]
-//        }
-//
-//        self.allMessageAnger.append(score)
-//        return score
-//    }
     
     func getCurrentMessageEmotion() -> Double {
         return self.currentMessageScores[0][0]
@@ -337,19 +357,17 @@ extension ViewController {
         let message = messages[indexPath.item]
         let isOutgoing = (message.senderId == senderId)
         
-//        jsqCell.textView.textColor = (isOutgoing) ? .white : .black
-        
         if !isOutgoing {
             jsqCell.textView.textColor = UIColor.white
         } else {
-//            print("Row ", indexPath.row)
-//            print("Count", self.allMessageAnger.count)
+
 //            row  1 3 5
 //          count  1 2 3
             
             if (indexPath.row == self.allMessageAnger.count + self.allMessageAnger.count - 1) {
                 let fraction = self.allMessageAnger[self.allMessageAnger.count - 1]
                 print(fraction)
+                print("hi")
                 jsqCell.textView.textColor = colorWhite.interpolateRGBColorTo(end: colorRed, fraction: CGFloat(fraction))
             } else {
                  jsqCell.textView.textColor = UIColor.white
