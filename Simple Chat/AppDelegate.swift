@@ -15,6 +15,7 @@
  **/
 
 import UIKit
+import HxColor
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -24,6 +25,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        let navigationBarAppearace = UINavigationBar.appearance()
+        
+        navigationBarAppearace.tintColor = UIColor.darkGray
+        navigationBarAppearace.barTintColor = UIColor(0xE8ECEE)
+        navigationBarAppearace.titleTextAttributes = [
+            NSForegroundColorAttributeName:UIColor.darkGray]
+        
+        navigationBarAppearace.isTranslucent = false
+
+        UIApplication.shared.statusBarStyle = UIStatusBarStyle.default
+        
+        UITabBar.appearance().barTintColor = UIColor.darkGray
+        UITabBar.appearance().tintColor = UIColor(0xE8ECEE)
+        
         return true
     }
 

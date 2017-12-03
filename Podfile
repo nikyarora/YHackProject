@@ -8,5 +8,6 @@ target 'Simple Chat' do
   # Pods for Simple Chat
   pod 'JSQMessagesViewController'
   pod 'SwiftyJSON'
+  pod 'HxColor', '~> 4.0'
 
 end

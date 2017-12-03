@@ -38,6 +38,6 @@ enum User: String {
 }
 
 private let avatarWatson = JSQMessagesAvatarImageFactory.avatarImage(
-    with: #imageLiteral(resourceName: "watson_avatar"),
+    with: #imageLiteral(resourceName: "mirum-logo"),
     diameter: 24
 )

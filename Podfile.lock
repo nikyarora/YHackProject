@@ -1,18 +1,21 @@
 PODS:
+  - HxColor (4.0.0)
   - JSQMessagesViewController (7.3.5):
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
   - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
+  - HxColor (~> 4.0)
   - JSQMessagesViewController
   - SwiftyJSON
 
 SPEC CHECKSUMS:
+  HxColor: b745c3bf80d24de593a5dc9121a98850db4f7f26
   JSQMessagesViewController: 6587f56aedbcb150a8ba1d968e1ef58b1bc758b7
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: e33bc8342244e46328e2dc2fafb818b5989f4165
+PODFILE CHECKSUM: 7138d3305d96a5a3faa045bd555fcb58a980056e
 
 COCOAPODS: 1.3.1

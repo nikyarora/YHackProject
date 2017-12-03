@@ -184,17 +184,23 @@ extension ViewController {
         inputToolbar.contentView.leftBarButtonItem = microphoneButton
         
         // infoView
-        self.infoView = UIView(frame: CGRect(x: 0, y: 325, width: self.view.frame.width, height: 75))
+        self.infoView = UIView()
+
         self.infoView.backgroundColor = UIColor.jsq_messageBubbleLightGray()
+        infoView.layer.cornerRadius = 6
+        infoView.layer.masksToBounds = true
         self.view.addSubview(self.infoView)
+        _ = self.infoView.anchor(self.view.topAnchor, left: self.view.leftAnchor, bottom: nil, right: self.view.rightAnchor, topConstant: 263, leftConstant: 6, bottomConstant: 6, rightConstant: 6, widthConstant: 0, heightConstant: 75)
         
         // MoreInfo Button
         self.moreInfo = UIButton(type: .system)
-        moreInfo.setTitle("More", for: .normal)
+//        moreInfo.setTitle("More", for: .normal)
+        moreInfo.setBackgroundImage(#imageLiteral(resourceName: "more"), for: .normal)
+        
         moreInfo.setTitleColor(UIColor.blue, for: .normal)
-        moreInfo.backgroundColor = UIColor.yellow
+//        moreInfo.backgroundColor = UIColor.yellow
         self.infoView.addSubview(moreInfo)
-        _ = moreInfo.anchor(self.infoView.topAnchor, left: nil, bottom: self.infoView.bottomAnchor, right: self.infoView.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 80, heightConstant: 40)
+        _ = moreInfo.anchor(self.infoView.topAnchor, left: nil, bottom: self.infoView.bottomAnchor, right: self.infoView.rightAnchor, topConstant: 8, leftConstant: 8, bottomConstant: 8, rightConstant: 8, widthConstant: 60, heightConstant: 0)
         moreInfo.addTarget(self, action: #selector(goToMoreInfoView), for: .touchUpInside)
         
         // InfoText
@@ -202,9 +208,17 @@ extension ViewController {
         self.infoViewText.backgroundColor = UIColor.clear
         self.infoViewText.text = "Customer Emotion"
         self.infoViewText.isEditable = false
+        infoViewText.contentInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
         infoView.addSubview(self.infoViewText)
         
         let artributedText = NSMutableAttributedString(string:self.infoViewText.text, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 18, weight: UIFontWeightMedium), NSForegroundColorAttributeName: UIColor.black])
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+        
+        let length = artributedText.string.count
+        artributedText.addAttributes([NSParagraphStyleAttributeName:paragraphStyle], range: NSRange(location: 0, length:length))
+        
         infoViewText.attributedText = artributedText
         
         self.infoViewText.anchorToTop(self.infoView.topAnchor, left: self.infoView.leftAnchor, bottom: self.infoView.bottomAnchor, right: self.moreInfo.leftAnchor)
@@ -308,7 +322,7 @@ extension ViewController {
                 }
                 
                 // Show the dominant emotions
-                var emotionInfoText = ""
+//                var emotionInfoText = ""
                 var emotionNames = [String]()
                 
                 for categoryIndex in 0..<3 {
@@ -320,11 +334,15 @@ extension ViewController {
                     }
                 }
                 
-                for emotionName in emotionNames {
-                    emotionInfoText += emotionName + "  "
+                if (emotionNames.count > 0) {
+                    let attributedText = NSMutableAttributedString(string: emotionNames[0], attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 18, weight: UIFontWeightMedium), NSForegroundColorAttributeName: UIColor.black])
+                    
+                    for index in 1..<emotionNames.count {
+                        attributedText.append(NSAttributedString(string: "  \(emotionNames[index])",  attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 18, weight: UIFontWeightMedium), NSForegroundColorAttributeName: UIColor.black]))
+                    }
+                    
+                    self.infoViewText.attributedText = attributedText
                 }
-                
-                self.infoViewText.text = emotionInfoText
             }
         }
     }
