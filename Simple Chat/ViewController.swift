@@ -22,6 +22,7 @@ import ConversationV1
 import TextToSpeechV1
 import JSQMessagesViewController
 import SwiftyJSON
+import HxColor
 
 class ViewController: JSQMessagesViewController {
     
@@ -87,6 +88,16 @@ extension ViewController {
             version: "2017-05-26"
         )
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let logo = UIImage(named: "logotop2")
+        let imageView = UIImageView(image: logo)
+        imageView.contentMode = .scaleAspectFit // set imageview's content mode
+        self.navigationItem.titleView = imageView
+    }
+    
     
     /// Present an error message
     func failure(error: Error) {
@@ -167,7 +178,7 @@ extension ViewController {
         // bubbles
         let factory = JSQMessagesBubbleImageFactory()
         let incomingColor = UIColor(red: 0.29, green: 0.44, blue: 0.54, alpha: 1)
-        let outgoingColor = UIColor.jsq_messageBubbleLightGray()
+        let outgoingColor = UIColor(0x9B9B9B)
         incomingBubble = factory!.incomingMessagesBubbleImage(with: incomingColor)
         outgoingBubble = factory!.outgoingMessagesBubbleImage(with: outgoingColor)
         
@@ -200,7 +211,7 @@ extension ViewController {
         moreInfo.setTitleColor(UIColor.blue, for: .normal)
 //        moreInfo.backgroundColor = UIColor.yellow
         self.infoView.addSubview(moreInfo)
-        _ = moreInfo.anchor(self.infoView.topAnchor, left: nil, bottom: self.infoView.bottomAnchor, right: self.infoView.rightAnchor, topConstant: 8, leftConstant: 8, bottomConstant: 8, rightConstant: 8, widthConstant: 60, heightConstant: 0)
+        _ = moreInfo.anchor(self.infoView.topAnchor, left: nil, bottom: self.infoView.bottomAnchor, right: self.infoView.rightAnchor, topConstant: 20, leftConstant: 16, bottomConstant: 20, rightConstant: 16, widthConstant: 34, heightConstant: 0)
         moreInfo.addTarget(self, action: #selector(goToMoreInfoView), for: .touchUpInside)
         
         // InfoText

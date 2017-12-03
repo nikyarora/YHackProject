@@ -3,7 +3,6 @@
 //  Simple Chat
 //
 //  Created by nathan on 12/3/17.
-//  Copyright © 2017 Glenn R. Fisher. All rights reserved.
 //
 
 import UIKit

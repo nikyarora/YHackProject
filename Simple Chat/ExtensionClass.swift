@@ -1,6 +1,7 @@
 // taken from let's build that app
 import Foundation
 import UIKit
+import HxColor
 
 struct ColorComponents {
     var r:CGFloat, g:CGFloat, b:CGFloat, a:CGFloat
@@ -38,7 +39,7 @@ extension UIColor {
 }
 
 let colorWhite = UIColor.white
-let colorRed = UIColor.red
+let colorRed = UIColor(0xE82741)
 
 extension UIView {
     
