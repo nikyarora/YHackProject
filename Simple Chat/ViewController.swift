@@ -259,21 +259,26 @@ extension ViewController {
                     socialScores.append(tone.score)
                 }
                 
+                // Negative emotion level for anry/disgust
                 self.currentMessageScores = [emotionScores, languageScores, socialScores]
                 self.allMessageScores.append(self.currentMessageScores)
                 
-                for emotionIndex in 0..<(self.currentMessageScores[0].count) {
-                    
+                var negativeEmotionLevel = self.currentMessageScores[0][0]      // Angry
+                if negativeEmotionLevel < self.currentMessageScores[0][1] {     // Disgust More
+                    negativeEmotionLevel = self.currentMessageScores[0][1]
                 }
                 
-                self.allMessageAnger.append(self.currentMessageScores[0][0])
+                self.allMessageAnger.append(negativeEmotionLevel)
                 
+                // Reload collection view data
                 self.collectionView.reloadData()
                 
+                // Show the infoView
                 if self.infoView.isHidden {
                     self.infoView.isHidden = false
                 }
                 
+                // Show the dominant emotions
                 var emotionInfoText = ""
                 var emotionNames = [String]()
                 
